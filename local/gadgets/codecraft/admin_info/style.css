@@ -1,0 +1,86 @@
+.bx-gadgets-codecraft-info {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.bx-gadgets-codecraft-info .cc-logo {
+    display: block;
+    margin: 0 auto;
+    background: scroll url("/bitrix/gadgets/codecraft/admin_info/images/cc-logo.png") center center no-repeat;
+    width: 275px;
+    height: 58px;
+}
+
+.bx-gadgets-codecraft-info .bx-gadgets-content {
+    height: auto !important;
+}
+
+.bx-gadgets-codecraft-info .bx-gadgets-side {
+    background: scroll url("/bitrix/gadgets/codecraft/admin_info/images/stitch.png") repeat-y 0 0;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table td {
+    padding: 0 1em;
+    width: 50%;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table td:first-child {
+    border-right: 1px solid #d2d2d2;
+    text-align: center;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table .caption {
+    color: #aaaaaa;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table p {
+    margin: .5em 0;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table a {
+    color: #feae38;
+    text-decoration: none;
+}
+
+.bx-gadgets-codecraft-info table.cc_gadget_info_table a:hover {
+    text-decoration: underline;
+}
+
+.bx-gadgets-codecraft-info:hover .bx-gadgets-color-config-close {
+    background-position: -1px -80px;
+    opacity: 0.5;
+}
+
+.bx-gadgets-codecraft-info:hover .bx-gadgets-color-config-close:hover {
+    opacity: 1;
+}
+
+@media (min-width: 1025px) {
+    .bx-gadgets-codecraft-info .cc-logo {
+        background: scroll url(/bitrix/gadgets/codecraft/admin_info/images/cc-logo-alt.png) center center no-repeat;
+        width: 118px;
+        height: 58px;
+    }
+    .bx-gadgets-codecraft-info table.cc_gadget_info_table .caption {
+        display: block;
+    }
+}
+@media (min-width: 1600px) {
+    .bx-gadgets-codecraft-info .cc-logo {
+        background: scroll url(/bitrix/gadgets/codecraft/admin_info/images/cc-logo.png) center center no-repeat;
+        width: 275px;
+        height: 58px;
+    }
+    .bx-gadgets-codecraft-info table.cc_gadget_info_table .caption {
+        display: inline;
+    }
+}
