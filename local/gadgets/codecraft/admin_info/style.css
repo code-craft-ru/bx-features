@@ -9,7 +9,7 @@
 .bx-gadgets-codecraft-info .cc-logo {
     display: block;
     margin: 0 auto;
-    background: scroll url("/bitrix/gadgets/codecraft/admin_info/images/cc-logo.png") center center no-repeat;
+    background: scroll url("/local/gadgets/codecraft/admin_info/images/cc-logo.png") center center no-repeat;
     width: 275px;
     height: 58px;
 }
@@ -19,7 +19,7 @@
 }
 
 .bx-gadgets-codecraft-info .bx-gadgets-side {
-    background: scroll url("/bitrix/gadgets/codecraft/admin_info/images/stitch.png") repeat-y 0 0;
+    background: scroll url("/local/gadgets/codecraft/admin_info/images/stitch.png") repeat-y 0 0;
 }
 
 .bx-gadgets-codecraft-info table.cc_gadget_info_table {
@@ -66,7 +66,7 @@
 
 @media (min-width: 1025px) {
     .bx-gadgets-codecraft-info .cc-logo {
-        background: scroll url(/bitrix/gadgets/codecraft/admin_info/images/cc-logo-alt.png) center center no-repeat;
+        background: scroll url(/local/gadgets/codecraft/admin_info/images/cc-logo-alt.png) center center no-repeat;
         width: 118px;
         height: 58px;
     }
@@ -76,7 +76,7 @@
 }
 @media (min-width: 1600px) {
     .bx-gadgets-codecraft-info .cc-logo {
-        background: scroll url(/bitrix/gadgets/codecraft/admin_info/images/cc-logo.png) center center no-repeat;
+        background: scroll url(/local/gadgets/codecraft/admin_info/images/cc-logo.png) center center no-repeat;
         width: 275px;
         height: 58px;
     }
