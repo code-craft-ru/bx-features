@@ -44,10 +44,10 @@ else
             <p><span class="caption"><?=GetMessage('ADDRESS')?> </span><a href="http://<?=$siteName?>"><?=$siteName?></a></p>
             <p><span class="caption"><?=GetMessage('SITE_CREATER')?> </span><?=GetMessage('STUDIO')?><a href="http://code-craft.ru">Code Craft</a></p>
             <?if($isStarted):?>
-                <p><span class="caption">E-mail: </span><a href="mailto:welcome@code-craft.ru">welcome@code-craft.ru</a></p>
+                <p><span class="caption"><?=GetMessage('EMAIL')?> </span><a href="mailto:welcome@code-craft.ru">welcome@code-craft.ru</a></p>
             <?elseif(is_array($arReport)):?>
                 <p><span class="caption"><?=GetMessage('RESPONSIBLE')?> </span><?=$arReport["TESTER"]?></p>
-                <p><span class="caption">E-mail: </span><a href="mailto:<?=$arReport["EMAIL"]?>"><?=$arReport["EMAIL"]?></a></p>
+                <p><span class="caption"><?=GetMessage('EMAIL')?> </span><a href="mailto:<?=$arReport["EMAIL"]?>"><?=$arReport["EMAIL"]?></a></p>
                 <p><span class="caption"><?=GetMessage('WEBSITE_PUT')?> </span><?$arDate = explode(' ', $arReport["DATE_CREATE"]); echo $arDate[0];?></p>
             <?else:?>
                 <p><span class="caption">E-mail: </span><a href="mailto:welcome@code-craft.ru">welcome@code-craft.ru</a></p>

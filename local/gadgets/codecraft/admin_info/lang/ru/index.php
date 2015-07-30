@@ -1,9 +1,9 @@
 <?
 $MESS["GD_SECURITY_LEVEL"] = "";
-$MESS['ADDRESS']='Àäðåñ ñàéòà:';
-$MESS['SITE_CREATER']='Ñîçäàòåëü ñàéòà:';
-$MESS['STUDIO']='Ñòóäèÿ';
-$MESS['RESPONSIBLE']='Îòâåòñòâåííîå ëèöî:';
-$MESS['WEBSITE_PUT']='Ñàéò ñäàí:';
-$MESS['']='';
+$MESS['ADDRESS']='ÐÐ´Ñ€ÐµÑ ÑÐ°Ð¹Ñ‚Ð°:';
+$MESS['SITE_CREATER']='Ð¡Ð¾Ð·Ð´Ð°Ñ‚ÐµÐ»ÑŒ ÑÐ°Ð¹Ñ‚Ð°:';
+$MESS['STUDIO']='Ð¡Ñ‚ÑƒÐ´Ð¸Ñ';
+$MESS['RESPONSIBLE']='ÐžÑ‚Ð²ÐµÑ‚ÑÑ‚Ð²ÐµÐ½Ð½Ð¾Ðµ Ð»Ð¸Ñ†Ð¾:';
+$MESS['WEBSITE_PUT']='Ð¡Ð°Ð¹Ñ‚ ÑÐ´Ð°Ð½:';
+$MESS['EMAIL']='E-mail:';
 

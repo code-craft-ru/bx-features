@@ -5,5 +5,5 @@ $MESS['SITE_CREATER']='Website creator:';
 $MESS['STUDIO']='Studio';
 $MESS['RESPONSIBLE']='The responsible person:';
 $MESS['WEBSITE_PUT']='Website deposited:';
-$MESS['']='';
+$MESS['EMAIL']='E-mail:';
 
