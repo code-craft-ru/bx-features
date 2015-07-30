@@ -1,4 +1,5 @@
 <?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+IncludeTemplateLangFile(__FILE__);
 /**
  * Created by PhpStorm.
  * User: Manriel
@@ -7,7 +8,7 @@
  */
 
 global $APPLICATION;
-$APPLICATION->SetAdditionalCSS("/bitrix/gadgets/codecraft/admin_info/style.css");
+$APPLICATION->SetAdditionalCSS("/local/gadgets/codecraft/admin_info/style.css");
 
 $default = $_SERVER['SERVER_NAME'];
 if ($_SERVER['SERVER_PORT'] != 80) {
@@ -40,14 +41,14 @@ else
             <span class="cc-logo"></span>
         </td>
         <td style="min-width: 178px;">
-            <p><span class="caption">Адрес сайта: </span><a href="http://<?=$siteName?>"><?=$siteName?></a></p>
-            <p><span class="caption">Создатель сайта: </span>Студия <a href="http://code-craft.ru">Code Craft</a></p>
+            <p><span class="caption"><?=GetMessage('ADDRESS')?> </span><a href="http://<?=$siteName?>"><?=$siteName?></a></p>
+            <p><span class="caption"><?=GetMessage('SITE_CREATER')?> </span><?=GetMessage('STUDIO')?><a href="http://code-craft.ru">Code Craft</a></p>
             <?if($isStarted):?>
                 <p><span class="caption">E-mail: </span><a href="mailto:welcome@code-craft.ru">welcome@code-craft.ru</a></p>
             <?elseif(is_array($arReport)):?>
-                <p><span class="caption">Ответственное лицо: </span><?=$arReport["TESTER"]?></p>
+                <p><span class="caption"><?=GetMessage('RESPONSIBLE')?> </span><?=$arReport["TESTER"]?></p>
                 <p><span class="caption">E-mail: </span><a href="mailto:<?=$arReport["EMAIL"]?>"><?=$arReport["EMAIL"]?></a></p>
-                <p><span class="caption">Сайт сдан: </span><?$arDate = explode(' ', $arReport["DATE_CREATE"]); echo $arDate[0];?></p>
+                <p><span class="caption"><?=GetMessage('WEBSITE_PUT')?> </span><?$arDate = explode(' ', $arReport["DATE_CREATE"]); echo $arDate[0];?></p>
             <?else:?>
                 <p><span class="caption">E-mail: </span><a href="mailto:welcome@code-craft.ru">welcome@code-craft.ru</a></p>
             <?endif;?>
