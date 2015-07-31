@@ -61,7 +61,7 @@ class CClassLoader {
      */
     private function includeClass($class) {
         $name = strtolower(str_replace("\\", "/", $class));
-        $classesDir = BX_ROOT."/php_interface/include/classes/";
+        $classesDir = "/local/php_interface/include/classes/";
         $classFile = $_SERVER["DOCUMENT_ROOT"] . $classesDir . $name . ".php";
         if (file_exists($classFile)) {
             require_once($classFile);
