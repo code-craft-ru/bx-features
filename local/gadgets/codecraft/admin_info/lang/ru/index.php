@@ -1,9 +1,9 @@
 <?
 $MESS["GD_SECURITY_LEVEL"] = "";
-$MESS['ADDRESS']='Адрес сайта:';
-$MESS['SITE_CREATER']='Создатель сайта:';
-$MESS['STUDIO']='Студия';
-$MESS['RESPONSIBLE']='Ответственное лицо:';
-$MESS['WEBSITE_PUT']='Сайт сдан:';
-$MESS['EMAIL']='E-mail:';
+$MESS['GD_ADDRESS']='Адрес сайта:';
+$MESS['GD_SITE_CREATER']='Создатель сайта:';
+$MESS['GD_STUDIO']='Студия';
+$MESS['GD_RESPONSIBLE']='Ответственное лицо:';
+$MESS['GD_WEBSITE_PUT']='Сайт сдан:';
+$MESS['GD_EMAIL']='E-mail:';
 

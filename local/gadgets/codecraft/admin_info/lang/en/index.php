@@ -1,9 +1,9 @@
 <?
 $MESS["GD_SECURITY_LEVEL"] = "";
-$MESS['ADDRESS']='Site address:';
-$MESS['SITE_CREATER']='Website creator:';
-$MESS['STUDIO']='Studio';
-$MESS['RESPONSIBLE']='The responsible person:';
-$MESS['WEBSITE_PUT']='Website deposited:';
-$MESS['EMAIL']='E-mail:';
+$MESS['GD_ADDRESS']='Site address:';
+$MESS['GD_SITE_CREATER']='Website creator:';
+$MESS['GD_STUDIO']='Studio';
+$MESS['GD_RESPONSIBLE']='The responsible person:';
+$MESS['GD_WEBSITE_PUT']='Website deposited:';
+$MESS['GD_EMAIL']='E-mail:';
 
