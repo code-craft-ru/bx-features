@@ -1,9 +1,9 @@
 <?
-$MESS["GD_SECURITY_LEVEL"] = "";
-$MESS['GD_ADDRESS']='Site address:';
-$MESS['GD_SITE_CREATER']='Website creator:';
-$MESS['GD_STUDIO']='Studio';
-$MESS['GD_RESPONSIBLE']='The responsible person:';
-$MESS['GD_WEBSITE_PUT']='Website deposited:';
-$MESS['GD_EMAIL']='E-mail:';
+$MESS["GD_CODECRAFT_SECURITY_LEVEL"] = "";
+$MESS['GD_CODECRAFT_ADDRESS']='Site address:';
+$MESS['GD_CODECRAFT_SITE_CREATER']='Website creator:';
+$MESS['GD_CODECRAFT_STUDIO']='Studio';
+$MESS['GD_CODECRAFT_RESPONSIBLE']='The responsible person:';
+$MESS['GD_CODECRAFT_WEBSITE_PUT']='Website deposited:';
+$MESS['GD_CODECRAFT_EMAIL']='E-mail:';
 
