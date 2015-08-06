@@ -7,18 +7,11 @@
  *
  * @var array                    $arParams
  * @var array                    $arResult
- * @var array                    $templateData
- *
- * @var string                   $componentPath
- * @var string                   $templateName
- * @var string                   $templateFile
- * @var string                   $templateFolder
  *
  * @global CUser                 $USER
  * @global CMain                 $APPLICATION
  * @global CDatabase             $DB
  */
 
-use Bitrix\Main\Localization\Loc;
-
-echo $arResult['TEST_STRING'], '<br>', GetMessage('NO_CONTENT');
+$arResult['TITLE']       = $arResult['TEST_STRING'];
+$arResult['TEST_STRING'] = 'Replaced test string';
