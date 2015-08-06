@@ -1,10 +1,35 @@
-<?php if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+
 /**
- * Created by PhpStorm.
- * User: manri_000
- * Date: 20.03.2015
- * Time: 15:44
+ * @var CCodeCraftNullComponent $this
+ * @var array                   $arParams
+ *
+ * @global CUser                $USER
+ * @global CMain                $APPLICATION
+ * @global CDatabase            $DB
  */
 
-$this->IncludeComponentTemplate();
-?>
+use Bitrix\Main\Localization\Loc;
+
+global $USER;
+global $APPLICATION;
+global $DB;
+
+$arResult = [];
+
+if ($this->StartResultCache()) {
+    if ($this->getFalse()) {
+        ShowError(Loc::getMessage('COMPONENT_NULL_ERROR_MESSAGE'));
+        $this->AbortResultCache();
+
+        return;
+    }
+
+    $arResult['TEST_STRING'] = $this->getTestString();
+
+    $this->SetResultCacheKeys(['TEST_STRING']);
+
+    $this->IncludeComponentTemplate();
+}

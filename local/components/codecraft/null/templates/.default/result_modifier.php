@@ -7,18 +7,16 @@
  *
  * @var array                    $arParams
  * @var array                    $arResult
- * @var array                    $templateData
- *
- * @var string                   $componentPath
- * @var string                   $templateName
- * @var string                   $templateFile
- * @var string                   $templateFolder
  *
  * @global CUser                 $USER
  * @global CMain                 $APPLICATION
  * @global CDatabase             $DB
  */
 
-use Bitrix\Main\Localization\Loc;
+$arResult['TITLE']       = $arResult['TEST_STRING'];
+$arResult['TEST_STRING'] = 'Replaced test string';
 
-echo $arResult['TEST_STRING'], '<br>', GetMessage('NO_CONTENT');
+if ($component = $this->__component) {
+    $component->arResult['TITLE'] = $arResult['TITLE'];
+    $component->SetResultCacheKeys(['TITLE']);
+}
