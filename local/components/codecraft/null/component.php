@@ -20,7 +20,7 @@ global $DB;
 $arResult = [];
 
 if ($this->StartResultCache()) {
-    if (!$this->getFalse()) {
+    if ($this->getFalse()) {
         ShowError(Loc::getMessage('COMPONENT_NULL_ERROR_MESSAGE'));
         $this->AbortResultCache();
 

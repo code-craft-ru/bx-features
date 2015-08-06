@@ -15,3 +15,8 @@
 
 $arResult['TITLE']       = $arResult['TEST_STRING'];
 $arResult['TEST_STRING'] = 'Replaced test string';
+
+if ($component = $this->__component) {
+    $component->arResult['TITLE'] = $arResult['TITLE'];
+    $component->SetResultCacheKeys(['TITLE']);
+}
