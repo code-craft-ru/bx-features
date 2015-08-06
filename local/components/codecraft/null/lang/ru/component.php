@@ -2,4 +2,4 @@
     die();
 }
 
-$MESS['COMPONENT_NULL_ERROR_MESSAGE'] = 'Œ¯Ë·Í‡';
+$MESS['COMPONENT_NULL_ERROR_MESSAGE'] = '–û—à–∏–±–∫–∞';
