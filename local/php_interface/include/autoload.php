@@ -82,4 +82,4 @@ class CClassLoader {
     }
 }
 
-$autoloader = CClassLoader::getInstance();
+CClassLoader::getInstance();
