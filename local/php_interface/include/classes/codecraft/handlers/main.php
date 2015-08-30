@@ -1,6 +1,6 @@
 <?
 
-namespace Handlers;
+namespace CodeCraft\Handlers;
 
 use Bitrix\Main\Loader;
 

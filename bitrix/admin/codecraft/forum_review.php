@@ -1,5 +1,10 @@
 <?
 /**
+ * @author Panychev Dmitry, Code Craft
+ * @link http://code-craft.ru
+ *
+ * Forum reviews v 0.8 provide forum`s messages moderate on admin panel.
+ *
  * @global CMain     $APPLICATION
  * @global CDatabase $DB
  * @global CUser     $USER

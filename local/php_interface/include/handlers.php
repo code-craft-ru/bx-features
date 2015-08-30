@@ -1,4 +1,4 @@
 <?
 
-AddEventHandler('main', 'OnBuildGlobalMenu', array('\\Handlers\\Main',
+AddEventHandler('main', 'OnBuildGlobalMenu', array('\\CodeCraft\\Handlers\\Main',
                                                    'addReviewMenu'));
