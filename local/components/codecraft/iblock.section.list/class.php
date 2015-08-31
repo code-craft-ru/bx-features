@@ -4,7 +4,7 @@
 
 use Bitrix\Main\Loader;
 
-class CCodeCraftNullComponent extends CBitrixComponent
+class CCodeCraftIBlockSectionList extends CBitrixComponent
 {
     private $paramList = array();
 
