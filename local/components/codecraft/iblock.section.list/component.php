@@ -3,16 +3,16 @@
 }
 
 /**
- * @var CCodeCraftNullComponent $this
- * @var array                   $arParams
- * @var array                   $arResult
- * @var string                  $componentPath
- * @var string                  $componentName
- * @var string                  $componentTemplate
+ * @var CCodeCraftIBlockSectionList $this
+ * @var array                       $arParams
+ * @var array                       $arResult
+ * @var string                      $componentPath
+ * @var string                      $componentName
+ * @var string                      $componentTemplate
  *
- * @global CUser                $USER
- * @global CMain                $APPLICATION
- * @global CDatabase            $DB
+ * @global CUser                    $USER
+ * @global CMain                    $APPLICATION
+ * @global CDatabase                $DB
  */
 
 use Bitrix\Main\Localization\Loc;
@@ -67,13 +67,15 @@ if ($this->StartResultCache(false, (!$arParams['CACHE_GROUPS'] ? false : $USER->
             $arResult['SECTION']['PATH'][] = $arPath;
         }
     } else {
-        $arResult['SECTION']            = array('ID'          => 0,
-                                                'DEPTH_LEVEL' => 0);
+        $arResult['SECTION']            = array(
+            'ID'          => 0,
+            'DEPTH_LEVEL' => 0
+        );
         $arFilter['<=' . 'DEPTH_LEVEL'] = $arParams['TOP_DEPTH'];
     }
     $intSectionDepth = $arResult['SECTION']['DEPTH_LEVEL'];
 
-    $arSort = array('left_margin' => 'asc',);
+    $arSort     = array('left_margin' => 'asc',);
     $rsSections = CIBlockSection::GetList($arSort, $arFilter, $arParams['COUNT_ELEMENTS'], $arSelect);
     $rsSections->SetUrlTemplates('', $arParams['SECTION_URL']);
     while ($arSection = $rsSections->GetNext()) {
@@ -100,8 +102,10 @@ if ($this->StartResultCache(false, (!$arParams['CACHE_GROUPS'] ? false : $USER->
         }
         $arSection['RELATIVE_DEPTH_LEVEL'] = $arSection['DEPTH_LEVEL'] - $intSectionDepth;
 
-        $arButtons                = CIBlock::GetPanelButtons($arSection['IBLOCK_ID'], 0, $arSection['ID'], array('SESSID'  => false,
-                                                                                                                 'CATALOG' => true));
+        $arButtons                = CIBlock::GetPanelButtons($arSection['IBLOCK_ID'], 0, $arSection['ID'], array(
+            'SESSID'  => false,
+            'CATALOG' => true
+        ));
         $arSection['EDIT_LINK']   = $arButtons['edit']['edit_section']['ACTION_URL'];
         $arSection['DELETE_LINK'] = $arButtons['edit']['delete_section']['ACTION_URL'];
 
@@ -110,17 +114,16 @@ if ($this->StartResultCache(false, (!$arParams['CACHE_GROUPS'] ? false : $USER->
 
     $arResult['SECTIONS_COUNT'] = count($arResult['SECTIONS']);
 
-    $this->SetResultCacheKeys(array('SECTIONS_COUNT',
-                                    'SECTION',));
+    $this->SetResultCacheKeys(array(
+                                  'SECTIONS_COUNT',
+                                  'SECTION',
+                              ));
 
     $this->IncludeComponentTemplate();
 }
 
 if ($arResult['SECTIONS_COUNT'] > 0 || isset($arResult['SECTION'])) {
-    if ($USER->IsAuthorized()
-        && $APPLICATION->GetShowIncludeAreas()
-        && \Bitrix\Main\Loader::includeModule('iblock')
-    ) {
+    if ($USER->IsAuthorized() && $APPLICATION->GetShowIncludeAreas() && \Bitrix\Main\Loader::includeModule('iblock')) {
         $UrlDeleteSectionButton = '';
         if (isset($arResult['SECTION']) && $arResult['SECTION']['IBLOCK_SECTION_ID'] > 0) {
             $rsSection = CIBlockSection::GetList(array(), array('=ID' => $arResult['SECTION']['IBLOCK_SECTION_ID']), false, array('SECTION_PAGE_URL'));
@@ -136,22 +139,22 @@ if ($arResult['SECTIONS_COUNT'] > 0 || isset($arResult['SECTION'])) {
             $UrlDeleteSectionButton  = CIBlock::ReplaceDetailURL($url_template, $arIBlock, true, false);
         }
 
-        $arReturnUrl = array('add_section'    => ('' != $arParams['SECTION_URL'] ? $arParams['SECTION_URL']
-            : CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'SECTION_PAGE_URL')),
-                             'add_element'    => ('' != $arParams['SECTION_URL'] ? $arParams['SECTION_URL']
-                                 : CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'SECTION_PAGE_URL')),
-                             'delete_section' => $UrlDeleteSectionButton,);
-        $arButtons   = CIBlock::GetPanelButtons($arParams['IBLOCK_ID'], 0, $arResult['SECTION']['ID'], array('RETURN_URL' => $arReturnUrl,
-                                                                                                             'CATALOG'    => true));
+        $arReturnUrl = array(
+            'add_section'    => ('' != $arParams['SECTION_URL'] ? $arParams['SECTION_URL'] : CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'SECTION_PAGE_URL')),
+            'add_element'    => ('' != $arParams['SECTION_URL'] ? $arParams['SECTION_URL'] : CIBlock::GetArrayByID($arParams['IBLOCK_ID'], 'SECTION_PAGE_URL')),
+            'delete_section' => $UrlDeleteSectionButton,
+        );
+        $arButtons   = CIBlock::GetPanelButtons($arParams['IBLOCK_ID'], 0, $arResult['SECTION']['ID'], array(
+            'RETURN_URL' => $arReturnUrl,
+            'CATALOG'    => true
+        ));
 
         $this->AddIncludeAreaIcons(CIBlock::GetComponentMenu($APPLICATION->GetPublicShowMode(), $arButtons));
     }
 
     if ($arParams['ADD_SECTIONS_CHAIN'] && isset($arResult['SECTION']) && is_array($arResult['SECTION']['PATH'])) {
         foreach ($arResult['SECTION']['PATH'] as $arPath) {
-            if (isset($arPath['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'])
-                && $arPath['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'] != ''
-            ) {
+            if (isset($arPath['IPROPERTY_VALUES']['SECTION_PAGE_TITLE']) && $arPath['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'] != '') {
                 $APPLICATION->AddChainItem($arPath['IPROPERTY_VALUES']['SECTION_PAGE_TITLE'], $arPath['~SECTION_PAGE_URL']);
             } else {
                 $APPLICATION->AddChainItem($arPath['NAME'], $arPath['~SECTION_PAGE_URL']);
