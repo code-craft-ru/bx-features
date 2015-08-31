@@ -4,10 +4,10 @@ namespace EduCoder\Exceptions;
 
 /**
  * HTTP Errors
- * 404
- * 
+ * 403
+ *
  */
 
-class RestNotFound extends RestClientError
+class RestForbidden extends RestClientError
 {
 }

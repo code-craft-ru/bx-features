@@ -4,10 +4,10 @@ namespace EduCoder\Exceptions;
 
 /**
  * HTTP Errors
- * 410
- * 
+ * 422
+ *
  */
 
-class RestGone extends RestClientError
+class RestInvalidRecord extends RestClientError
 {
 }
