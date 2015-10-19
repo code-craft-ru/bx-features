@@ -1,3 +1,13 @@
+<? if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+  die();
+}
+
+use Bitrix\Main\Page\Asset;
+
+$asset = Asset::getInstance();
+
+$asset->addJs(SITE_TEMPLATE_PATH . '/js/project.js');
+?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
