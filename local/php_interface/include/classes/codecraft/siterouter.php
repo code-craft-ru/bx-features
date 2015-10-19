@@ -8,6 +8,7 @@ class SiteRouter
 {
     private $language        = [];
     private $defaultLanguage = 'ru';
+    private $languageUrlMap  = [];
     private $languageList    = ['ru' => ['ru',
                                          'be',
                                          'uk',
@@ -18,7 +19,10 @@ class SiteRouter
                                          'lv'],
                                 'en' => 'en'];
 
-    public function __construct() {
+    /**
+     * @param array $languageUrlMap - ['language' => 'url', ..., 'default' => 'url']
+     */
+    public function __construct($languageUrlMap) {
         if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
             if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) {
                 $this->language = array_combine($list[1], $list[2]);
@@ -30,6 +34,20 @@ class SiteRouter
         } else {
             $this->language = [];
         }
+    }
+
+    /**
+     * @param array $languageUrlMap
+     */
+    public function setLanguageUrlMap(array $languageUrlMap) {
+        $this->languageUrlMap = $languageUrlMap;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLanguageUrlMap() {
+        return $this->languageUrlMap;
     }
 
     /**
@@ -66,14 +84,44 @@ class SiteRouter
     }
 
     /**
-     * @param array $languageUrlMap - ['language' => 'url', ..., 'default' => 'url']
+     * @param string $pathTo404
      */
-    public function route(array $languageUrlMap) {
-        $language = $this->getBestMatch($this->languageList);
-
-        $languageUrlMap['default'] = $languageUrlMap['default'] ?: '/404.php';
+    public function route($pathTo404 = '') {
+        $language       = $this->getBestMatch($this->languageList);
+        $languageUrlMap = $this->getLanguageUrlMap();
 
         LanguageLink::setRootAlternateHeader($language);
-        LocalRedirect($languageUrlMap[$language] ?: $languageUrlMap['default'], false, '301 Moved Permanently');
+
+        if ($languageUrlMap[$language] || $languageUrlMap['default']) {
+            LocalRedirect($languageUrlMap[$language] ?: $languageUrlMap['default'], false, '301 Moved Permanently');
+        } else {
+            $this->showNotFoundPage($pathTo404);
+        }
+    }
+
+    /**
+     * @param string $pathTo404
+     *
+     * @buffer_restart
+     *
+     * @require 404 page
+     *
+     * @die
+     */
+    public function showNotFoundPage($pathTo404 = '') {
+        if (!$pathTo404) {
+            $pathTo404 = $_SERVER['DOCUMENT_ROOT'] . '/' . $this->getBestMatch($this->languageList) . '/404.php';
+        }
+
+        global $APPLICATION;
+        $APPLICATION->RestartBuffer();
+        try {
+            require_once($pathTo404);
+        } catch (\Exception $e) {
+            \CHTTP::SetStatus('404 Not Found');
+
+            echo '<h1>404 Not Found</h1>';
+        }
+        die;
     }
 }
