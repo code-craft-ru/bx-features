@@ -23,6 +23,8 @@ class SiteRouter
      * @param array $languageUrlMap - ['language' => 'url', ..., 'default' => 'url']
      */
     public function __construct($languageUrlMap) {
+        $this->setLanguageUrlMap($languageUrlMap);
+
         if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
             if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) {
                 $this->language = array_combine($list[1], $list[2]);
@@ -115,6 +117,7 @@ class SiteRouter
 
         global $APPLICATION;
         $APPLICATION->RestartBuffer();
+
         try {
             require_once($pathTo404);
         } catch (\Exception $e) {
@@ -122,6 +125,7 @@ class SiteRouter
 
             echo '<h1>404 Not Found</h1>';
         }
+
         die;
     }
 }
