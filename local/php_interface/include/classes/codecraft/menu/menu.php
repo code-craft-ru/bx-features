@@ -1,10 +1,13 @@
 <?php
 /**
- * Created by PhpStorm.
- * Company: Code Craft
- * User: Manriel
- * Date: 20.10.2015
- * Time: 12:59
+ * Abstract class Menu
+ * Provides recursive menu
+ *
+ * @author    Roman Shershnev <readytoban@gmail.com>
+ * @version   1.0
+ * @package   CodeCraft
+ * @category  Menu
+ * @copyright Copyright © 2015, Roman Shershnev
  */
 
 namespace CodeCraft\Menu;
