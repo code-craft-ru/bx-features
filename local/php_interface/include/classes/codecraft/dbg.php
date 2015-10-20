@@ -160,7 +160,7 @@ class DBG {
 
         $arrIPs  = array(
             '195.98.81.62',
-            '83.139.147.19'
+            '91.205.44.154'
         );
         $arHosts = array(
             'manriel.name',
