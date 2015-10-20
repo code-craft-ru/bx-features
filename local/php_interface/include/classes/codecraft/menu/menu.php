@@ -17,23 +17,36 @@ abstract class Menu {
     protected $menu     = [];
     protected $maxDepth = 4;
 
+    /**
+     * @param array $arResult
+     * @param array $arParams
+     */
     public function __construct($arResult = [], $arParams = []) {
-        $this->_setMenu($arResult);
-        $this->_setParams($arParams);
+        $this->init($arResult, $arParams);
+    }
+
+    public function init($arResult = [], $arParams = []) {
+        $this->_setMenu($arResult)->_setParams($arParams);
+
+        return $this;
     }
 
     private function _setMenu($arResult) {
-        $this->menu = $this->_makeTree(self::_resetMenuIndexes($arResult));
+        $this->menu = self::_makeTree(self::_resetMenuIndexes($arResult));
+
+        return $this;
     }
 
     private function _setParams($arParams) {
         if (isset($arParams['MAX_LEVEL'])) {
             $this->maxDepth = $arParams['MAX_LEVEL'];
         }
+
+        return $this;
     }
 
     private static function _resetMenuIndexes($menu) {
-        $result = array();
+        $result = [];
         foreach ($menu as $index => $item) {
             $result[] = $item;
         }
@@ -56,16 +69,16 @@ abstract class Menu {
             if ($inputMenu[$parentIndex]['IS_PARENT']) {
                 $parentDepth = $inputMenu[$parentIndex]['DEPTH_LEVEL'];
                 $index       = $parentIndex + 1;
-                $childMenu   = array();
+                $childMenu   = [];
                 while (isset($inputMenu[$index]) && $inputMenu[$index]['DEPTH_LEVEL'] > $parentDepth) {
                     $childMenu[] = $inputMenu[$index];
-                    unSet($inputMenu[$index]);
+                    unset($inputMenu[$index]);
                     $index++;
                 }
-                unSet($index);
+                unset($index);
                 $childMenu                           = self::_makeTree($childMenu);
                 $inputMenu[$parentIndex]['CHILDREN'] = $childMenu;
-                unSet($childMenu);
+                unset($childMenu);
             }
             $inputMenu = self::_resetMenuIndexes($inputMenu);
 
