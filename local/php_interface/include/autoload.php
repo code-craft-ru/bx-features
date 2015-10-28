@@ -65,9 +65,15 @@ class CClassLoader {
         $classFile = $_SERVER["DOCUMENT_ROOT"] . $classesDir . $name . ".php";
         if (file_exists($classFile)) {
             require_once($classFile);
-        }/* else {
-            throw new \Exception("Unable to load ".$class);
-        }*/
+        } else {
+            $classesDir = BX_ROOT."/php_interface/include/classes/";
+            $classFile = $_SERVER["DOCUMENT_ROOT"] . $classesDir . $name . ".php";
+            if (file_exists($classFile)) {
+                require_once($classFile);
+            }/* else {
+                throw new \Exception("Unable to load ".$class);
+            }*/
+        }
     }
 
     /**
