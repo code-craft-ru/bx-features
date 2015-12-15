@@ -14,7 +14,7 @@ namespace CodeCraft;
 
 class Tools {
 
-    public static void() {
+    public static function void() {
         return NULL;
     }
 
