@@ -41,10 +41,12 @@ abstract class Json {
     }
 
     /**
+     * @param bool/true $forceObject
+     * 
      * @return string
      */
-    public function getResponse() {
-        return json_encode($this->data, JSON_FORCE_OBJECT);
+    public function getResponse($forceObject = true) {
+        return json_encode($this->data, $forceObject ? JSON_FORCE_OBJECT : 0);
     }
 
 }
