@@ -41,6 +41,30 @@ abstract class Json {
     }
 
     /**
+     * @param mixed $data
+     *
+     * @return array
+     */
+    protected function statusOk($data = '') {
+        return [
+            'status' => 'ok',
+            'data'   => $data
+        ];
+    }
+
+    /**
+     * @param mixed $data Error text
+     *
+     * @return array
+     */
+    protected function statusError($data = 'Unknown error.') {
+        return [
+            'status' => 'error',
+            'data'   => $data
+        ];
+    }
+
+    /**
      * @param bool/true $forceObject
      * 
      * @return string
