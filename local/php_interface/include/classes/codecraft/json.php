@@ -31,14 +31,6 @@ abstract class Json {
      * @return $this
      */
     public function processRequest($request) {
-        switch ($request['action']) {
-            case 'willgo':
-                $this->actionWillGo($request['id']);
-                break;
-            default:
-
-                break;
-        }
         if (isset($request['action']) && is_callable([$this, 'action'.ucfirst($request['action'])])) {
             call_user_func([$this, 'action'.ucfirst($request['action'])], $request);
         } else {
