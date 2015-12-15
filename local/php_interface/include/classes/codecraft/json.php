@@ -16,12 +16,12 @@ namespace CodeCraft;
 abstract class Json {
 
     /* @var mixed $data */
-    var $data;
+    protected $data;
 
     /**
      * @param $request
      *
-     * @return $this
+     * @return void
      */
     abstract protected function actionDefault($request);
 
@@ -31,8 +31,9 @@ abstract class Json {
      * @return $this
      */
     public function processRequest($request) {
-        if (isset($request['action']) && is_callable([$this, 'action'.ucfirst($request['action'])])) {
-            call_user_func([$this, 'action'.ucfirst($request['action'])], $request);
+        $action = 'action' . ucfirst($request['action']);
+        if (isset($request['action']) && method_exists($this, $action)) {
+            $this->$action($request);
         } else {
             $this->actionDefault($request);
         }
