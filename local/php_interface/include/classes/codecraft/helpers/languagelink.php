@@ -13,8 +13,10 @@ class LanguageLink
             $path = $APPLICATION->GetCurPageParam();
         }
 
-        return ($withHost ? $protocol . $_SERVER['SERVER_NAME'] : '') . (!$languageFrom ? '/' . $languageTo . '/' . $path
-            : str_replace('/' . $languageFrom . '/', '/' . $languageTo . '/', $path));
+        $isOffSites = !(strpos($path, '/'.$languageFrom.'/') === 0);
+
+        return ($withHost ? $protocol . $_SERVER['SERVER_NAME'] : '') .
+               ($isOffSites ? '/' . $languageTo . $path : str_replace('/' . $languageFrom . '/', '/' . $languageTo . '/', $path));
     }
 
     public static function setAlternateHeader($languageTo, $languageFrom = false, $path = '') {
