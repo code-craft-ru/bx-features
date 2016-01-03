@@ -31,7 +31,7 @@ class CCodeCraftNullComponent extends \CBitrixComponent {
      * @param  array[string]mixed $arParams
      * @return array[string]mixed
      */
-    public static function onPrepareComponentParams($params) {
+    public function onPrepareComponentParams($params) {
         return $params;
     }
 
