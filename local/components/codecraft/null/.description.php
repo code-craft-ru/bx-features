@@ -4,6 +4,8 @@
 
 use Bitrix\Main\Localization\Loc;
 
+Loc::loadMessages(__FILE__);
+
 $arComponentDescription = ['NAME'        => Loc::getMessage('COMPONENT_NULL_NAME'),
                            'DESCRIPTION' => Loc::getMessage('COMPONENT_NULL_DESCRIPTION'),
                            'ICON'        => '/images/icon.gif',
