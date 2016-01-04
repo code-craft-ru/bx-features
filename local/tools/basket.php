@@ -12,8 +12,11 @@ define('NOT_CHECK_PERMISSIONS', true);
 require($_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/main/include/prolog_before.php');
 
 use Bitrix\Main\Loader;
+use CodeCraft\UserBasket;
 
-$mode = $_REQUEST['mode'];
+$result     = null;
+$mode       = $_REQUEST['mode'];
+$userBasket = UserBasket::getInstance();
 
 Loader::includeModule('catalog');
 Loader::includeModule('sale');
@@ -24,38 +27,40 @@ switch ($mode) {
         $quantity = (int)$_REQUEST['quantity'] ?: 1;
 
         $properties = [];
-        if ($_POST['prop']['color']) {
+
+        if ($_REQUEST['prop']['color']) {
             $properties[] = ['NAME'  => 'Цвет',
                              'CODE'  => 'color',
                              'SORT'  => '10',
-                             'VALUE' => $_POST['prop']['color']];
+                             'VALUE' => $_REQUEST['prop']['color']];
         }
-        if ($_POST['prop']['size']) {
+
+        if ($_REQUEST['prop']['size']) {
             $properties[] = ['NAME'  => 'Размер',
                              'CODE'  => 'size',
                              'SORT'  => '20',
-                             'VALUE' => $_POST['prop']['size']];
+                             'VALUE' => $_REQUEST['prop']['size']];
         }
 
-        $result = (bool)Add2BasketByProductID($id, $quantity, $properties);
+        if ($_REQUEST['favorite'] == 'y') {
+            $properties[] = ['NAME'  => 'В избранное',
+                             'CODE'  => 'favorite',
+                             'SORT'  => '1',
+                             'VALUE' => 'y'];
+        }
+
+        $result = $_REQUEST['favorite'] == 'y'
+            ? (bool)Add2BasketByProductID($id, $quantity, ['DELAY' => 'Y'], $properties)
+            : (bool)Add2BasketByProductID($id, $quantity, $properties);
+
         if (!$result) {
             break;
         }
     case 'reload':
-        $APPLICATION->IncludeComponent('bitrix:sale.basket.basket.line', 'template.header.basket', Array('PATH_TO_BASKET'     => '/personal/cart/',
-                                                                                                         'PATH_TO_PERSONAL'   => '/personal/',
-                                                                                                         'SHOW_PERSONAL_LINK' => 'Y',
-                                                                                                         'SHOW_NUM_PRODUCTS'  => 'Y',
-                                                                                                         'SHOW_TOTAL_PRICE'   => 'Y',
-                                                                                                         'SHOW_EMPTY_VALUES'  => 'Y',
-                                                                                                         'SHOW_PRODUCTS'      => 'Y',
-                                                                                                         'POSITION_FIXED'     => 'Y',
-                                                                                                         'PATH_TO_ORDER'      => '/personal/order/',
-                                                                                                         'SHOW_DELAY'         => 'N',
-                                                                                                         'SHOW_NOTAVAIL'      => 'N',
-                                                                                                         'SHOW_SUBSCRIBE'     => 'N',
-                                                                                                         'SHOW_PRICE'         => 'Y',
-                                                                                                         'SHOW_SUMMARY'       => 'Y'));
+        $APPLICATION->IncludeComponent("codecraft:sale.basket.line", ".default", array("COMPONENT_TEMPLATE" => ".default",
+                                                                                       "RECALCULATE_BASKET" => "Y",
+                                                                                       "PATH_TO_BASKET"     => "/personal/cart/",
+                                                                                       "PATH_TO_FAVORITE"   => "/personal/favorite/"), false);
         die;
         break;
     case 'recalculate':
@@ -65,7 +70,8 @@ switch ($mode) {
         $result = CSaleBasket::Update($id, ['QUANTITY' => $quantity]);
         break;
     case 'delete':
-        $id = (int)$_REQUEST['id'];
+        $id = $_REQUEST['favorite'] == 'y' ? $userBasket->getFavoriteId((int)$_REQUEST['productId'])
+            : (int)$_REQUEST['id'];
 
         $result = CSaleBasket::Delete($id);
         break;

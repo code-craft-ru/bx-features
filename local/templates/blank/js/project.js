@@ -2,8 +2,10 @@ CodeCraft = {
     Basket: {
         calculateAjax: null,
         options: {
-            basketSelector: '#small-basket',
-            productAddSelector: '.add-to-cart',
+            basketSelector: '.js-small-basket',
+            productAddSelector: '.js-add-to-cart',
+            favoriteAddSelector: '.js-add-to-favorite',
+            favoriteRemoveSelector: '.js-remove-from-favorite'
         },
         add: function (e, id) {
             e.preventDefault();
@@ -19,6 +21,38 @@ CodeCraft = {
                     if (!data.error) {
                         $(CodeCraft.Basket.options.basketSelector).replaceWith(data);
                     }
+                }
+            });
+        },
+        addToFavorite: function (e, id, domElement) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/local/tools/basket.php',
+                type: 'post',
+                data: {
+                    mode: 'add',
+                    id: id,
+                    favorite: 'y'
+                },
+                success: function (data) {
+                    $(CodeCraft.Basket.options.basketSelector).replaceWith(data);
+                }
+            });
+        },
+        removeFromFavorite: function (e, id, domElement) {
+            e.preventDefault();
+
+            $.ajax({
+                url: '/local/tools/basket.php',
+                type: 'post',
+                data: {
+                    mode: 'delete',
+                    favorite: 'y',
+                    productId: id
+                },
+                success: function (data) {
+                    CodeCraft.Basket.reload();
                 }
             });
         },
@@ -39,6 +73,14 @@ CodeCraft = {
 
             body.on('click', CodeCraft.Basket.options.productAddSelector, function (e) {
                 CodeCraft.Basket.add(e, $(this).data('id'));
+            });
+
+            body.on('click', CodeCraft.Basket.options.favoriteAddSelector, function (e) {
+                CodeCraft.Basket.addToFavorite(e, $(this).data('id'), this);
+            });
+
+            body.on('click', CodeCraft.Basket.options.favoriteRemoveSelector, function (e) {
+                CodeCraft.Basket.removeFromFavorite(e, $(this).data('id'), this);
             });
 
             body.on('click change', '.js-update', function (e) {
