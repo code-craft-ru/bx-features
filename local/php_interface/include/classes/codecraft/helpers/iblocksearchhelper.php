@@ -7,7 +7,8 @@ use \CodeCraft\MultipleLoader;
 /**
  * Class IBlockSearchHelper
  *
- * @todo write class description
+ * Helper to search in iBlocks. Use to custom ajax search, to simple get iBlock element ids with search by
+ * iBlocks/iBlocks types, etc
  *
  * @author    Dmitry Panychev <panychev@code-craft.ru>
  * @version   1.0
@@ -17,12 +18,17 @@ use \CodeCraft\MultipleLoader;
  */
 class IBlockSearchHelper
 {
-    const MODULE_ID         = 'iblock';
-    const IBLOCK_TYPE_PARAM = 'PARAM1';
-    const IBLOCK_ID_PARAM   = 'PARAM2';
+    const MODULE_ID             = 'iblock';
+    const IBLOCK_TYPE_PARAM     = 'PARAM1';
+    const IBLOCK_ID_PARAM       = 'PARAM2';
+    const TITLE_MIN_WORD_LENGTH = 3;
+
+    const SEARCH_MODE_SEARCH       = 0;
+    const SEARCH_MODE_SEARCH_TITLE = 1;
 
     private static $moduleList = ['iblock',
                                   'search'];
+    private        $searchMode;
 
     private $searchResult        = [];
     private $iBlockElementList   = [];
@@ -30,15 +36,41 @@ class IBlockSearchHelper
     private $error               = '';
 
     /**
+     * IBlockSearchHelper constructor.
+     *
+     * @param int $searchMode
+     *
+     * @throws \Bitrix\Main\LoaderException
+     */
+    public function __construct($searchMode = self::SEARCH_MODE_SEARCH) {
+        $this->setSearchMode($searchMode);
+        self::checkModules();
+    }
+
+    /**
+     * @throws \Bitrix\Main\LoaderException
+     */
+    public function checkModules() {
+        MultipleLoader::loadModuleList(static::$moduleList);
+    }
+
+    /**
+     * @param int $mode
+     */
+    public function setSearchMode($mode) {
+        $this->searchMode = $mode;
+    }
+
+    /**
      * @param string $query
      * @param string $iBlockType
      * @param int    $iBlockId
+     * @param int    $count
+     * @param int    $page
      *
      * @return bool
      */
-    public function search($query, $iBlockType = '', $iBlockId = 0) {
-        $search = new \CSearch();
-
+    public function search($query, $iBlockType = '', $iBlockId = 0, $count = 10, $page = 0) {
         $params = ['SITE_ID'   => SITE_ID,
                    'MODULE_ID' => static::MODULE_ID,
                    'QUERY'     => $query];
@@ -51,7 +83,15 @@ class IBlockSearchHelper
             $params[self::IBLOCK_ID_PARAM] = $iBlockId;
         }
 
-        $search->Search($params);
+        if ($this->searchMode == self::SEARCH_MODE_SEARCH_TITLE) {
+            $search = new \CSearchTitle();
+            $search->setMinWordLength(self::TITLE_MIN_WORD_LENGTH);
+            $search->Search($query, $count, $params);
+        } else {
+            $search = new \CSearch();
+            $search->Search($params);
+            $search->NavStart($count, false, $page);
+        }
 
         if ($result = (bool)$search->error) {
             $this->error = $search->error;
@@ -78,22 +118,6 @@ class IBlockSearchHelper
         while ($element = $elementCollection->GetNext()) {
             $this->iBlockElementList[] = $element;
         }
-    }
-
-    /**
-     * @throws \Bitrix\Main\LoaderException
-     */
-    public function checkModules() {
-        MultipleLoader::loadModuleList(static::$moduleList);
-    }
-
-    /**
-     * IBlockSearchHelper constructor.
-     *
-     * @throws \Bitrix\Main\LoaderException
-     */
-    public function __construct() {
-        self::checkModules();
     }
 
     /**
