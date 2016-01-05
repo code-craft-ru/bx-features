@@ -11,10 +11,10 @@ use \CodeCraft\MultipleLoader;
  * iBlocks/iBlocks types, etc
  *
  * @author    Dmitry Panychev <panychev@code-craft.ru>
- * @version   1.0
+ * @version   1.1
  * @package   CodeCraft
  * @category  Bitrix, search
- * @copyright Copyright © 2015, Dmitry Panychev
+ * @copyright Copyright © 2016, Dmitry Panychev
  */
 class IBlockSearchHelper
 {
