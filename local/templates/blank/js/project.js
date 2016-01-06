@@ -14,7 +14,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'add',
+                    action: 'add',
                     id: id
                 },
                 success: function (data) {
@@ -31,7 +31,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'add',
+                    action: 'add',
                     id: id,
                     favorite: 'y'
                 },
@@ -47,7 +47,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'delete',
+                    action: 'delete',
                     favorite: 'y',
                     productId: id
                 },
@@ -61,7 +61,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'reload'
+                    action: 'reload'
                 },
                 success: function (data) {
                     $(CodeCraft.Basket.options.basketSelector).replaceWith(data);
@@ -125,7 +125,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'recalculate',
+                    action: 'recalculate',
                     id: id,
                     quantity: quantity
                 }
@@ -146,7 +146,7 @@ CodeCraft = {
                 url: '/local/tools/basket.php',
                 type: 'post',
                 data: {
-                    mode: 'delete',
+                    action: 'delete',
                     id: id
                 }
             });

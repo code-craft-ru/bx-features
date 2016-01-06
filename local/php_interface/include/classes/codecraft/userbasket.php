@@ -8,7 +8,8 @@ use Bitrix\Main\LoaderException;
 /**
  * Class UserBasket
  *
- * @todo write class description
+ * Class for simple work with basket and favorite in Bitrix; gor simple watching it state.
+ *
  * @todo add static methods for get position/product count in basket/favorite with query getUserBasket (with group by)
  *
  * @author    Dmitry Panychev <panychev@code-craft.ru>

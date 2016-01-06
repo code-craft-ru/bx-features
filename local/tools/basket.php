@@ -15,13 +15,13 @@ use Bitrix\Main\Loader;
 use CodeCraft\UserBasket;
 
 $result     = null;
-$mode       = $_REQUEST['mode'];
+$action     = $_REQUEST['action'];
 $userBasket = UserBasket::getInstance();
 
 Loader::includeModule('catalog');
 Loader::includeModule('sale');
 
-switch ($mode) {
+switch ($action) {
     case 'add':
         $id       = (int)$_REQUEST['id'];
         $quantity = (int)$_REQUEST['quantity'] ?: 1;
