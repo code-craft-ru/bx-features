@@ -11,7 +11,7 @@ use \CodeCraft\MultipleLoader;
  * iBlocks/iBlocks types, etc
  *
  * @author    Dmitry Panychev <panychev@code-craft.ru>
- * @version   1.1
+ * @version   1.0
  * @package   CodeCraft
  * @category  Bitrix, search
  * @copyright Copyright © 2016, Dmitry Panychev
@@ -19,6 +19,7 @@ use \CodeCraft\MultipleLoader;
 class IBlockSearchHelper
 {
     const MODULE_ID             = 'iblock';
+    const CACHE_PATH            = '/search_helper/';
     const IBLOCK_TYPE_PARAM     = 'PARAM1';
     const IBLOCK_ID_PARAM       = 'PARAM2';
     const TITLE_MIN_WORD_LENGTH = 3;
@@ -29,6 +30,11 @@ class IBlockSearchHelper
     private static $moduleList = ['iblock',
                                   'search'];
     private        $searchMode;
+
+    private $isUseCache = false;
+    private $cacheTime  = 0;
+    /** @var \CPHPCache $cPhpCache */
+    private $cPhpCache = null;
 
     private $searchResult        = [];
     private $iBlockElementList   = [];
@@ -62,6 +68,57 @@ class IBlockSearchHelper
     }
 
     /**
+     * @param bool $isUseCache
+     * @param int  $cacheTime
+     */
+    public function setCacheOptions($isUseCache, $cacheTime = 360000) {
+        $this->cacheTime = (int)$cacheTime;
+        if (!$this->cacheTime) {
+            $isUseCache = false;
+        }
+
+        $this->isUseCache = (bool)$isUseCache;
+    }
+
+    /**
+     * @param $query
+     * @param $params
+     *
+     * @return string
+     */
+    private function buildCacheId($query, $params) {
+        return md5($query . $this->searchMode . serialize($params));
+    }
+
+    /**
+     * @param $query
+     * @param $params
+     *
+     * @return string
+     */
+    private function startCache($query, $params) {
+        $this->cPhpCache = new \CPHPCache();
+
+        if ($this->cPhpCache->InitCache($this->cacheTime, $this->buildCacheId($query, $params), self::CACHE_PATH)
+            && $cachedData = $this->cPhpCache->GetVars()
+        ) {
+            $this->searchResult        = $cachedData['searchResult'];
+            $this->iBlockElementIdList = $cachedData['iBlockElementIdList'];
+
+            return true;
+        } else {
+            $this->cPhpCache->StartDataCache($this->cacheTime, $this->buildCacheId($query, $params), self::CACHE_PATH);
+        }
+
+        return false;
+    }
+
+    private function endCache() {
+        $this->cPhpCache->EndDataCache(['searchResult'        => $this->searchResult,
+                                        'iBlockElementIdList' => $this->iBlockElementIdList]);
+    }
+
+    /**
      * @param string $query
      * @param string $iBlockType
      * @param int    $iBlockId
@@ -83,6 +140,10 @@ class IBlockSearchHelper
             $params[self::IBLOCK_ID_PARAM] = $iBlockId;
         }
 
+        if ($this->isUseCache && $this->startCache($query, $params)) {
+            return true;
+        }
+
         if ($this->searchMode == self::SEARCH_MODE_SEARCH_TITLE) {
             $search = new \CSearchTitle();
             $search->setMinWordLength(self::TITLE_MIN_WORD_LENGTH);
@@ -100,6 +161,10 @@ class IBlockSearchHelper
                 $this->searchResult[]        = $item;
                 $this->iBlockElementIdList[] = $item['ITEM_ID'];
             }
+        }
+
+        if ($this->isUseCache) {
+            $this->endCache();
         }
 
         return $result;
