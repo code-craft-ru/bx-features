@@ -1,9 +1,7 @@
 <? if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
-//var_dump($arResult);
-//$strNavQueryString         = ($arResult['NavQueryString'] != '' ? $arResult['NavQueryString'] . '&amp;' : '');
-//$arResult['PATH_TEMPLATE'] = $arResult['sUrlPath'] . '?' . $strNavQueryString;
+
 $arResult['PAGEN']         = 'PAGEN_' . $arResult['NavNum'] . '=';
 $arResult['PATH_TEMPLATE'] = $arResult['sUrlPathParams'] . $arResult['PAGEN'];
 $arResult['nStartPage']    = 1;
