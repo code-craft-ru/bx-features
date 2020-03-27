@@ -12,8 +12,14 @@
 
 namespace CodeCraft;
 
+use IPLib\Factory;
+use IPLib\Address\Type;
+
 class DBG {
 
+    protected static $validIPv4 = [];
+    protected static $validIPv6 = [];
+    
     /* function  __construct(){
 
     } */
@@ -149,30 +155,75 @@ class DBG {
     public static function _debugmessage($data) {
         return var_export($data, true);
     }
+    
+    public static function addAllowed($address) {
+        if (filter_var($address, FILTER_VALIDATE_IP && FILTER_FLAG_IPV6)) {
+            self::$validIPv6[] = $address;
+        } elseif (filter_var($address, FILTER_VALIDATE_IP && FILTER_FLAG_IPV4)) {
+            self::$validIPv4[] = $address;
+        } else {
+            $ips = self::resolveHostname($address);
+            foreach ($ips['v4'] as $ip) {
+                self::$validIPv4[] = $ip;
+            }
+            foreach ($ips['v6'] as $ip) {
+                self::$validIPv6[] = $ip;
+            }
+        }
+    }
+    
+    protected static function resolveHostname($hostname) {
+        $ips = [
+            'v4' => [],
+            'v6' => [],
+        ];
+        $ipv4 = gethostbynamel($hostname);
+        foreach ($ipv4 as $ip) {
+            $ips['v4'][] = $ip;
+        }
+    
+        $ipv6 = dns_get_record($hostname, DNS_AAAA);
+        foreach ($ipv6 as $record) {
+            if ($record["type"] == "AAAA") {
+                $ips['v6'][] = $record["ipv6"];
+            }
+        }
+        
+        return $ips;
+    }
 
     /**
      * @return bool
      */
     public static function isValidIP() {
 
-        if (isset($_COOKIE['DEBUG']))
+        if (isset($_COOKIE['DEBUG'])) {
             return true;
-
-        $arrIPs  = array(
-            '195.98.81.62',
-            '91.205.44.154'
-        );
-        $arHosts = array(
-            'manriel.name',
-        );
-        foreach ($arHosts as $host) {
-            $ip = gethostbyname($host);
-            if ($ip)
-                $arrIPs[] = $ip;
         }
-        $sUserIp = $_SERVER['REMOTE_ADDR'];
-
-        return in_array($sUserIp, $arrIPs);
+    
+        $remoteAddress = Factory::addressFromString($_SERVER['REMOTE_ADDR']);
+        if ($remoteAddress === null) {
+            return false;
+        }
+        $remoteAddressType = $remoteAddress->getAddressType();
+        
+        if ($remoteAddressType === Type::T_IPv4) {
+            foreach (self::$validIPv4 as $ip) {
+                $range = Factory::rangeFromString($ip);
+                if ($range === null) continue;
+                if ($remoteAddress->matches($range)) {
+                    return true;
+                }
+            }
+        } elseif ($remoteAddressType === Type::T_IPv6) {
+            foreach (self::$validIPv6 as $ip) {
+                $range = Factory::rangeFromString($ip);
+                if ($range === null) continue;
+                if ($remoteAddress->matches($range)) {
+                    return true;
+                }
+            }
+        }
     }
 
 }

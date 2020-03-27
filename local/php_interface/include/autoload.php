@@ -60,7 +60,7 @@ class CClassLoader {
      * @return null
      */
     private function includeClass($class) {
-        $name = strtolower(str_replace("\\", "/", $class));
+        $name = str_replace("\\", "/", $class);
         $classesDir = "/local/php_interface/include/classes/";
         $classFile = $_SERVER["DOCUMENT_ROOT"] . $classesDir . $name . ".php";
         if (file_exists($classFile)) {

@@ -6,14 +6,14 @@
  * @version   1.0
  * @package   CodeCraft
  * @category  Menu
- * @copyright Copyright © 2015, Roman Shershnev
+ * @copyright Copyright ï¿½ 2015, Roman Shershnev
  */
 
 namespace CodeCraft\Menu;
 
 class MenuSimple extends Menu {
 
-    protected function _drawMenu1Level($menu = [], $title = '') {
+    protected function _drawMenu1Level($menu = [], $title = '', $parent = null) {
         if (empty($menu)) {
             return '';
         }
@@ -51,16 +51,16 @@ class MenuSimple extends Menu {
         return $outString;
     }
 
-    protected function _drawMenu2Level($menu = [], $title = '') {
+    protected function _drawMenu2Level($menu = [], $title = '', $parent = null) {
         return $this->_drawMenu1Level($menu, $title);
     }
 
-    protected function _drawMenu3Level($menu = [], $title = '') {
-        return $this->_drawMenu1Level($menu, $title);
+    protected function _drawMenu3Level($menu = [], $title = '', $parent = null) {
+        return $this->_drawMenu2Level($menu, $title);
     }
 
-    protected function _drawMenu4Level($menu = [], $title = '') {
-        return $this->_drawMenu1Level($menu, $title);
+    protected function _drawMenu4Level($menu = [], $title = '', $parent = null) {
+        return $this->_drawMenu3Level($menu, $title);
     }
 
 }

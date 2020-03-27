@@ -7,7 +7,7 @@
  * @version   1.0
  * @package   CodeCraft
  * @category  Menu
- * @copyright Copyright © 2015, Roman Shershnev
+ * @copyright Copyright ï¿½ 2015, Roman Shershnev
  */
 
 namespace CodeCraft\Menu;
@@ -104,25 +104,25 @@ abstract class Menu {
      *
      * @return string
      */
-    protected function _drawMenuNextLevel($menu = [], $depth = 1, $title = "") {
+    protected function _drawMenuNextLevel($menu = [], $depth = 1, $title = "", $parent = null) {
         if ($depth > $this->maxDepth || $depth < 1) {
             return '';
         }
         switch ($depth) {
             case 1:
-                return $this->_drawMenu1Level($menu, $title);
+                return $this->_drawMenu1Level($menu, $title, $parent);
                 break;
             case 2:
-                return $this->_drawMenu2Level($menu, $title);
+                return $this->_drawMenu2Level($menu, $title, $parent);
                 break;
             case 3:
-                return $this->_drawMenu3Level($menu, $title);
+                return $this->_drawMenu3Level($menu, $title, $parent);
                 break;
             case 4:
-                return $this->_drawMenu4Level($menu, $title);
+                return $this->_drawMenu4Level($menu, $title, $parent);
                 break;
             default:
-                return $this->_drawMenu1Level($menu, $title);
+                return $this->_drawMenu1Level($menu, $title, $parent);
                 break;
         }
     }
@@ -135,7 +135,7 @@ abstract class Menu {
      *
      * @return string
      */
-    abstract protected function _drawMenu1Level($menu = [], $title = '');
+    abstract protected function _drawMenu1Level($menu = [], $title = '', $parent = null);
 
     /**
      * Returns 2nd level menu html
@@ -145,7 +145,7 @@ abstract class Menu {
      *
      * @return string
      */
-    abstract protected function _drawMenu2Level($menu = [], $title = '');
+    abstract protected function _drawMenu2Level($menu = [], $title = '', $parent = null);
 
     /**
      * Returns 3rd level menu html
@@ -155,7 +155,7 @@ abstract class Menu {
      *
      * @return string
      */
-    abstract protected function _drawMenu3Level($menu = [], $title = '');
+    abstract protected function _drawMenu3Level($menu = [], $title = '', $parent = null);
 
     /**
      * Returns 4th level menu html
@@ -165,6 +165,6 @@ abstract class Menu {
      *
      * @return string
      */
-    abstract protected function _drawMenu4Level($menu = [], $title = '');
+    abstract protected function _drawMenu4Level($menu = [], $title = '', $parent = null);
 
 }
