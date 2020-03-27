@@ -16,14 +16,13 @@ use IPLib\Factory;
 use IPLib\Address\Type;
 
 class DBG {
-
-    protected static $validIPv4 = [];
-    protected static $validIPv6 = [];
+    
+    public static $validRanges = [];
     
     /* function  __construct(){
 
     } */
-
+    
     /**
      * @param mixed                 $data
      * @param bool | string | false $die
@@ -33,7 +32,7 @@ class DBG {
     public function __invoke($data, $die = false, $msg = null, $color = null) {
         self::dbg($data, $die, $msg, $color);
     }
-
+    
     /**
      * @param  mixed $data
      *
@@ -41,10 +40,10 @@ class DBG {
      */
     public function __toString() {
         list($data) = func_get_arg(1);
-
+        
         return self::debugmessage($data);
     }
-
+    
     /**
      * @param mixed                 $data
      * @param bool | string | false $die
@@ -54,25 +53,25 @@ class DBG {
      * @return null
      */
     public static function dbg($data, $die = false, $msg = null, $color = null) {
-
+        
         if (!is_bool($die)) {
             $msg = $die;
             $die = false;
         }
-
+        
         if (is_string($msg) && preg_match("/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/", $msg)) {
             $color = $msg;
             $msg   = null;
         }
-
+        
         if (self::isValidIP()) {
             echo self::debugmessage($data, (!empty($msg) ? $msg : null), $color);
             if ($die)
                 die();
         }
-
+        
     }
-
+    
     /**
      * @param mixed                 $data
      * @param bool | string | false $die
@@ -81,12 +80,12 @@ class DBG {
      * @return null
      */
     public static function dbg2EventLog($data, $die = false, $msg = 'DEBUG') {
-
+        
         if (!is_bool($die)) {
             $msg = $die;
             $die = false;
         }
-
+        
         $sDebug    = self::_debugmessage($data);
         $oEventLog = new \CEventLog();
         $oEventLog->Add(array(
@@ -99,7 +98,7 @@ class DBG {
         if ($die && self::isValidIP())
             die();
     }
-
+    
     /**
      * @param mixed                 $data
      * @param bool | string | false $die
@@ -108,22 +107,22 @@ class DBG {
      * @return null
      */
     public static function dbg2File($data, $die = false, $msg = 'DEBUG') {
-
+        
         if (!is_bool($die)) {
             $msg = $die;
             $die = false;
         }
-
+        
         if (!defined('LOG_FILENAME')) {
             define("LOG_FILENAME", $_SERVER["DOCUMENT_ROOT"] . "/debug.log");
         }
-
+        
         AddMessage2Log(self::_debugmessage($data), $msg);
-
+        
         if ($die && self::isValidIP())
             die();
     }
-
+    
     /**
      * @param  mixed  $data
      * @param  string $header
@@ -135,7 +134,7 @@ class DBG {
         if ($color == null || $color == '')
             $color = '#008000';
         $dbg = debug_backtrace();
-
+        
         $sRetStr = "<table border='0' style='color: ${color}; font-size: 8pt; border: 1px solid ${color};'>";
         if (strlen($header) > 0)
             $sRetStr .= "<tr><td>[${header}]</td></tr>";
@@ -143,10 +142,10 @@ class DBG {
         $sRetStr .= self::_debugmessage($data);
         $sRetStr .= "</pre></td></tr>";
         $sRetStr .= "</table>";
-
+        
         return $sRetStr;
     }
-
+    
     /**
      * @param mixed $data
      *
@@ -157,22 +156,28 @@ class DBG {
     }
     
     public static function addAllowed($address) {
-        if (filter_var($address, FILTER_VALIDATE_IP && FILTER_FLAG_IPV6)) {
-            self::$validIPv6[] = $address;
-        } elseif (filter_var($address, FILTER_VALIDATE_IP && FILTER_FLAG_IPV4)) {
-            self::$validIPv4[] = $address;
-        } else {
+        $range = Factory::rangeFromString($address);
+        if ($range === null) {
             $ips = self::resolveHostname($address);
             foreach ($ips['v4'] as $ip) {
-                self::$validIPv4[] = $ip;
+                if ($resolvedAddress = Factory::rangeFromString($ip)) {
+                    self::$validRanges[] = $resolvedAddress;
+                }
             }
             foreach ($ips['v6'] as $ip) {
-                self::$validIPv6[] = $ip;
+                if (strpos($ip, '/') === false) {
+                    $ip .= '/64';
+                }
+                if ($resolvedRange = Factory::rangeFromString($ip)) {
+                    self::$validRanges[] = $resolvedRange;
+                }
             }
+        } else {
+            self::$validRanges[] = $range;
         }
     }
     
-    protected static function resolveHostname($hostname) {
+    public static function resolveHostname($hostname) {
         $ips = [
             'v4' => [],
             'v6' => [],
@@ -181,7 +186,7 @@ class DBG {
         foreach ($ipv4 as $ip) {
             $ips['v4'][] = $ip;
         }
-    
+        
         $ipv6 = dns_get_record($hostname, DNS_AAAA);
         foreach ($ipv6 as $record) {
             if ($record["type"] == "AAAA") {
@@ -191,39 +196,28 @@ class DBG {
         
         return $ips;
     }
-
+    
     /**
      * @return bool
      */
     public static function isValidIP() {
-
+        
         if (isset($_COOKIE['DEBUG'])) {
             return true;
         }
-    
+        
         $remoteAddress = Factory::addressFromString($_SERVER['REMOTE_ADDR']);
         if ($remoteAddress === null) {
             return false;
         }
         $remoteAddressType = $remoteAddress->getAddressType();
         
-        if ($remoteAddressType === Type::T_IPv4) {
-            foreach (self::$validIPv4 as $ip) {
-                $range = Factory::rangeFromString($ip);
-                if ($range === null) continue;
-                if ($remoteAddress->matches($range)) {
-                    return true;
-                }
-            }
-        } elseif ($remoteAddressType === Type::T_IPv6) {
-            foreach (self::$validIPv6 as $ip) {
-                $range = Factory::rangeFromString($ip);
-                if ($range === null) continue;
-                if ($remoteAddress->matches($range)) {
-                    return true;
-                }
+        foreach (self::$validRanges as $range) {
+            if ($range === null) continue;
+            if ($remoteAddress->matches($range)) {
+                return true;
             }
         }
     }
-
+    
 }
